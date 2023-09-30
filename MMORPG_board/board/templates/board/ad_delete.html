@@ -1,0 +1,22 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+Удаление объявления
+{% endblock title %}
+
+{% block content %}
+    <br><h3>Удалить данное объявление?</h3><br>
+    <div class="card">
+        <div class="card-header">
+            <h3>{{ ad.title }}</h3>
+            <p>Автор: {{ad.author}}</p><br>
+            <p>Дата создания: {{ad.dateCreation}}</p><br>
+            <p>Категория: {{ad.adCategory}}</p><br><br>
+            <p>{{ad.text}}</p><br><br>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input class="btn btn-success" type="submit" value="Удалить">
+            </form><br>
+        </div>
+    </div>
+{% endblock content %}

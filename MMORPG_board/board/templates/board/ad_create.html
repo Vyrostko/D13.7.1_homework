@@ -1,0 +1,46 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+Создание нового объявления
+{% endblock title %}
+
+{% block content %}
+
+<h3>Создание нового объявления</h3>
+
+<form method="POST" enctype="multipart/form-data" class="form-vertical">
+  {% csrf_token %}
+
+  <div class="form-group">
+    {{ form.title.label_tag }}
+    {{ form.title }}
+  </div><br>
+
+  <div class="form-group">
+    {{ form.text.label_tag }}
+    {{ form.text }}
+  </div><br>
+
+  <div class="form-group">
+    {{ form.adCategory.label_tag }}
+    {{ form.adCategory }}
+  </div><br>
+
+  <div class="form-group">
+    {{ form.image.label_tag }}
+    {{ form.image }}
+  </div><br>
+
+  <div class="form-group">
+    {{ form.video.label_tag }}
+    {{ form.video }}
+  </div><br>
+
+  <div class="form-group">
+    {{ form.file.label_tag }}
+    {{ form.file }}
+  </div><br>
+
+  <input class="btn btn-success" type="submit" value="Создать">
+</form>
+
+{% endblock content %}

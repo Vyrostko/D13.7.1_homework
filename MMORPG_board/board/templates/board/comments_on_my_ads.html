@@ -1,0 +1,64 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+Отклики
+{% endblock title %}
+
+{% block content %}
+    <h1>Добро пожаловать {{user.username}}!</h1><br>
+    <h3>Отклики на ваши объявления:</h3><br>
+
+    {% if ads %}
+        {% if ads_with_comments %}
+            <form method="GET">
+                {% csrf_token %}
+                <label for="ad-select">Выберите отклики на конкретное объявление:</label>
+                <select id="ad-select" name="selected_ad">
+                    <option value="">Все объявления</option>
+                    {% for ad in ads %}
+                        <option value="{{ ad.id }}">{{ ad.title }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Показать отклики</button>
+            </form><br>
+
+            {% if selected_ad %}
+                <h3>Отклики на объявление "{{ selected_ad.title }}" (Категория: {{ selected_ad.adCategory }}):</h3>
+                    {% for comment in comments_for_selected_ad %}
+                        <div class="ad-block card mb-4">
+                            <div class="card-body">
+                                <h3>{{comment.commentAuthor}} оставил отклик на ваше объявление <a href="{% url 'ad' selected_ad.id %}" class="card-title">{{selected_ad.title}} (Категория: {{selected_ad.adCategory}})<br><br></a></h3>
+                                <p class="card-text">{{ comment.text }}</p><br>
+                                <a class="btn btn-primary" href="{% url 'accept_comment' comment.id %}">Принять</a>
+                                <a class="btn btn-primary" href="{% url 'delete_comment' comment.id %}">Удалить</a>
+                            </div>
+                        </div><br>
+                    {% endfor %}
+
+            {% else %}
+                {% for ad in ads %}
+                    {% for comment in ad.comments.all %}
+                        <div class="ad-block card mb-4">
+                            <div class="card-body">
+                                <h3>{{comment.commentAuthor}} оставил отклик на ваше объявление <a href="{% url 'ad' ad.id %}" class="card-title">{{ad.title}} (Категория: {{ad.adCategory}})<br><br></a></h3>
+                                <p class="card-text">{{ comment.text }}</p><br>
+                                <a class="btn btn-primary" href="{% url 'accept_comment' comment.id %}">Принять</a>
+                                <a class="btn btn-primary" href="{% url 'delete_comment' comment.id %}">Удалить</a>
+                            </div>
+                        </div><br>
+                    {% endfor %}
+                {% endfor %}
+
+                {% include 'bulletin_board_app/parts/paginator.html' %}
+            {% endif %}
+
+        {% else %}
+            <h6>На ваши объявления пока еще никто не оставил отклик:(</h6>
+        {% endif %}
+
+    {% else %}
+        <h6>Ваших объявлений пока к сожалению нет:(</h6>
+        <br>
+        <a class="btn btn-primary" href="{% url 'ad_create' %}">Добавить объявление</a>
+    {% endif %}
+
+{% endblock content %}

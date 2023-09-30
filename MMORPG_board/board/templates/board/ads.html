@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+Главная страница
+{% endblock title %}
+
+{% block content %}
+    <h1>Добро пожаловать {{user.username}}!</h1><br>
+    <a class="btn btn-primary" href="{% url 'ad_create' %}">Добавить объявление</a><br><br>
+    <h3>Все объявления:</h3><br>
+    {% if ads %}
+        {% for ad in ads %}
+            <div class="ad-block card mb-4">
+                <div class="card-body">
+                    <h3><a href="{% url 'ad' ad.id %}" class="card-title">{{ad.title}} (Категория: {{ad.adCategory}})</a></h3><br>
+                    <p class="card-text">{{ ad.text|truncatechars:100 }}</p><br>
+                    {% if ad.image %}
+                        <img src="{{ ad.image.url }}" alt="Изображение объявления" width='600' height='auto' class="img-fluid">
+                    {% endif %}
+                </div>
+            </div><br>
+        {% endfor %}
+
+        {% include 'bulletin_board_app/parts/paginator.html' %}
+
+    {% else %}
+        <h6>Объявлений пока к сожалению нет:(</h6>
+    {% endif %}
+    <br><br>
+    <a class="btn btn-primary" href="{% url 'ad_create' %}">Добавить объявление</a>
+{% endblock content %}
